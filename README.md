@@ -4,6 +4,13 @@ A Full Stack Library Management System that allows administrators to manage book
 The system simplifies library operations by digitizing book records, user management, and borrowing processes through a modern web interface.
 
 ---
+## 🌐 Live Deployment
+
+Frontend (Vercel)  
+https://lms-frontend-eta-orcin.vercel.app
+
+Backend API (Render)  
+https://lms-yce2.onrender.com/api
 
 ## 🚀 Features
 
