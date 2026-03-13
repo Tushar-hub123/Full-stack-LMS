@@ -60,29 +60,3 @@ Axios (API communication)
 
 Visual Studio Code
 
-📁 Project Folder Structure
-LMS-Project
-│
-├── frontend      # React client application
-├── backend       # Express server and API
-└── README.md
-⚙️ Setup Instructions
-1. Clone the repository
-git clone https://github.com/bansallalit1411/LMS.git
-2. Navigate into the project folder
-cd LMS
-3. Install dependencies
-npm install
-4. Start the application
-npm start
-🔮 Possible Future Enhancements
-
-Online book reservation feature
-
-Automatic late fee calculation
-
-Admin dashboard with analytics
-
-Barcode/QR code scanning for books
-
-Email reminders for due dates
