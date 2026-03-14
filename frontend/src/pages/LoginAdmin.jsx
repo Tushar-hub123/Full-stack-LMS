@@ -11,33 +11,62 @@ export default function LoginAdmin() {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+const submit = async () => {
+  console.log("LOGIN BUTTON CLICKED"); // ADD THIS
+  setError("");
 
-  const submit = async () => {
-    setError("");
+  if (!adminId || !password) {
+    setError("Please enter Admin ID and Password");
+    return;
+  }
 
-    if (!adminId || !password) {
-      setError("Please enter Admin ID and Password");
+  try {
+    const res = await api.post("/auth/login", {
+      adminId,
+      password,
+    });
+
+    console.log("API RESPONSE:", res.data);
+
+    if (res.data.role !== "admin") {
+      setError("Not an admin account");
       return;
     }
 
-    try {
-      const res = await api.post("/auth/login", {
-        adminId,
-        password,
-      });
+    login(res.data);
+    navigate("/admin/dashboard");
 
-      if (res.data.role !== "admin") {
-        setError("Not an admin account");
-        return;
-      }
+  } catch (err) {
+    console.log("ERROR:", err);
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
+  // const submit = async () => {
+  //   setError("");
 
-      login(res.data);
-      navigate("/admin/dashboard");
+  //   if (!adminId || !password) {
+  //     setError("Please enter Admin ID and Password");
+  //     return;
+  //   }
 
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }
-  };
+  //   try {
+  //     const res = await api.post("/auth/login", {
+  //       adminId,
+  //       password,
+  //     });
+
+  //     if (res.data.role !== "admin") {
+  //       setError("Not an admin account");
+  //       return;
+  //     }
+
+  //     login(res.data);
+  //     navigate("/admin/dashboard");
+
+  //   } catch (err) {
+  //     setError(err.response?.data?.message || "Login failed");
+  //   }
+  // };
 
   return (
     <div className="login-page admin-theme">
