@@ -12,7 +12,8 @@ export default function LoginAdmin() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 const submit = async () => {
-  console.log("LOGIN BUTTON CLICKED"); // ADD THIS
+  console.log("LOGIN BUTTON CLICKED");
+
   setError("");
 
   if (!adminId || !password) {
@@ -20,25 +21,19 @@ const submit = async () => {
     return;
   }
 
+  console.log("BEFORE REQUEST");
+
   try {
+
     const res = await api.post("/auth/login", {
       adminId,
       password,
     });
 
-    console.log("API RESPONSE:", res.data);
-
-    if (res.data.role !== "admin") {
-      setError("Not an admin account");
-      return;
-    }
-
-    login(res.data);
-    navigate("/admin/dashboard");
+    console.log("AFTER REQUEST", res);
 
   } catch (err) {
-    console.log("ERROR:", err);
-    setError(err.response?.data?.message || "Login failed");
+    console.log("REQUEST ERROR", err);
   }
 };
   // const submit = async () => {
