@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import Home from "./pages/Home";
 import PublicBooks from "./pages/PublicBooks";
@@ -13,15 +13,13 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
 
-import { useEffect } from "react";
-
-
 export default function App() {
   const { user } = useContext(AuthContext);
 
+  // Wake up backend server
   useEffect(() => {
-  fetch("https://lms-yce2.onrender.com");
-}, []);
+    fetch("https://lms-yce2.onrender.com/api");
+  }, []);
 
   return (
     <Routes>
@@ -55,9 +53,6 @@ export default function App() {
       />
 
       <Route path="*" element={<Navigate to="/" />} />
-
     </Routes>
-
-    
   );
 }
