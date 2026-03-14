@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
-import cartRoutes from "./routes/cart.js";
 
+import cartRoutes from "./routes/cart.js";
 import authRoutes from "./routes/auth.js";
 import adminRoutes from "./routes/admin.js";
 import bookRoutes from "./routes/books.js";
@@ -14,19 +14,19 @@ import User from "./models/User.js";
 dotenv.config();
 const app = express();
 
-app.use(
-  cors({
-    origin: "https://lms-frontend-eta-orcin.vercel.app",
-    credentials: true,
-  })
-);
-
-
+app.use(cors({
+  origin: "https://lms-frontend-eta-orcin.vercel.app",
+  credentials: true
+}));
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-app.use("/api/cart", cartRoutes); 
+
+app.use("/api/cart", cartRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/books", bookRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 mongoose.connect(process.env.MONGO_URL)
   .then(async () => {
@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGO_URL)
 
       await User.create({
         role: "admin",
-        adminId: process.env.ADMIN_ID,   // ✅ FIX
+        adminId: process.env.ADMIN_ID,
         name: "Library Admin",
         password: hashed
       });
@@ -47,14 +47,8 @@ mongoose.connect(process.env.MONGO_URL)
     }
   });
 
+const PORT = process.env.PORT || 5000;
 
-
-app.use("/api/auth", authRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/books", bookRoutes);
-app.use("/api/transactions", transactionRoutes);
-
-
-app.listen(process.env.PORT, () =>
-  console.log("Server running on port", process.env.PORT)
+app.listen(PORT, () =>
+  console.log("Server running on port", PORT)
 );
