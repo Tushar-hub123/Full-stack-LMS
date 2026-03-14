@@ -13,8 +13,15 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
 
+import { useEffect } from "react";
+
+
 export default function App() {
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+  fetch("https://lms-yce2.onrender.com");
+}, []);
 
   return (
     <Routes>
