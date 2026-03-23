@@ -448,7 +448,7 @@ export default function PublicBooks() {
                       src={
                         book.image?.startsWith("http")
                           ? book.image
-                          : `http://localhost:4000/uploads/${book.image}`
+                          : `https://lms-final-5mk1.onrender.com/uploads/${book.image}`
                       }
                       alt={book.title}
                     />
