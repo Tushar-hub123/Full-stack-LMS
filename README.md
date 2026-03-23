@@ -9,7 +9,7 @@ Frontend (Vercel)
 https://lms-frontend-eta-orcin.vercel.app
 
 Backend API (Render)
-https://lms-yce2.onrender.com/api
+https://lms-final-5mk1.onrender.com
 
 ✨ Key Features
 
