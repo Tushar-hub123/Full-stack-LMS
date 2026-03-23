@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
 /* ─── Constants ──────────────────────────────────────────────────────────── */
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_BASE = import.meta.env.VITE_API_URL || "https://lms-final-5mk1.onrender.com";
 
 const STATUS = {
   cart:     { label: "Pending",  color: "#f59e0b", bg: "rgba(245,158,11,.12)",  border: "rgba(245,158,11,.25)"  },
