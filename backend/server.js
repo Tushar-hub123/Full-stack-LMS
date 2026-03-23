@@ -22,8 +22,7 @@ const app = express();
 /* ── Middleware ─────────────────────────────────────── */
 app.use(cors({
   origin: [
-    "http://localhost:5173",
-    "http://localhost:3000",
+    "https://lms-frontend-qe9g.onrender.com"
   ],
   credentials: true,
 }));
