@@ -20,11 +20,15 @@ const __dirname  = path.dirname(__filename);
 const app = express();
 
 /* ── Middleware ─────────────────────────────────────── */
+// app.use(cors({
+//   origin: [
+//     "https://lms-frontend-eta-orcin.vercel.app"
+//   ],
+//   credentials: true,
+// }));
 app.use(cors({
-  origin: [
-    "https://lms-frontend-eta-orcin.vercel.app"
-  ],
-  credentials: true,
+  origin: true,
+  credentials: true
 }));
 
 app.use(express.json());
