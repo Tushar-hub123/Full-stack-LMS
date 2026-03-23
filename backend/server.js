@@ -22,7 +22,7 @@ const app = express();
 /* ── Middleware ─────────────────────────────────────── */
 app.use(cors({
   origin: [
-    "https://lms-frontend-qe9g.onrender.com"
+    "https://lms-frontend-eta-orcin.vercel.app"
   ],
   credentials: true,
 }));
