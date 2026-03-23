@@ -8,23 +8,44 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-    // For students
+    // Student fields
     rollNo: {
       type: String,
       unique: true,
       sparse: true,
+      trim: true,
     },
 
-    // For admins
+    // Admin fields
     adminId: {
       type: String,
       unique: true,
       sparse: true,
+      trim: true,
     },
 
-    name: String,
-    branch: String,
-    password: String,
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      sparse: true,
+    },
+
+    branch: {
+      type: String,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

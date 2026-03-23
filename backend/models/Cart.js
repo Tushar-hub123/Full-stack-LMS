@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 const CartSchema = new mongoose.Schema(
   {
     studentId: {
-      type: String,
+      type: String,   // stores rollNo
       required: true,
+      trim: true,
     },
     bookId: {
       type: mongoose.Schema.Types.ObjectId,

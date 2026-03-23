@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 import PublicBooks from "./pages/PublicBooks";
 import LoginSelector from "./pages/LoginSelector";
 import LoginStudent from "./pages/LoginStudent";
 import LoginAdmin from "./pages/LoginAdmin";
-
+import SignUp from "./pages/SignUp"
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
@@ -24,14 +24,15 @@ export default function App() {
   return (
     <Routes>
       {/* PUBLIC */}
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/books" element={<PublicBooks />} />
 
       {/* LOGIN */}
       <Route path="/login" element={<LoginSelector />} />
       <Route path="/login/student" element={<LoginStudent />} />
       <Route path="/login/admin" element={<LoginAdmin />} />
-
+      <Route path="/signup" element={<SignUp />} />
+      
       {/* STUDENT */}
       <Route
         path="/student/dashboard"
