@@ -1,13 +1,27 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
+import fs from "fs"; // ✅ added
+import { fileURLToPath } from "url"; // ✅ added
 import Book from "../models/Book.js";
 
 const router = express.Router();
 
+/* ── Fix __dirname (ES module) ─────────────────────── */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/* ── Ensure uploads folder exists ─────────────────── */
+const uploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
 /* ── Multer config ─────────────────────────────────── */
 const storage = multer.diskStorage({
-  destination: "uploads/",
+  destination: (req, file, cb) => {
+    cb(null, uploadDir); // ✅ fixed absolute path
+  },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     cb(null, `${Date.now()}${ext}`);
@@ -18,17 +32,15 @@ const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
     const allowed = /jpeg|jpg|png|webp/;
-    const ok = allowed.test(path.extname(file.originalname).toLowerCase()) &&
-               allowed.test(file.mimetype);
+    const ok =
+      allowed.test(path.extname(file.originalname).toLowerCase()) &&
+      allowed.test(file.mimetype);
     ok ? cb(null, true) : cb(new Error("Only image files are allowed"));
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-/* ═══════════════════════════════════════════
-   GET /api/books
-   Public — fetch all books
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.get("/", async (req, res) => {
   try {
     const books = await Book.find().sort({ createdAt: -1 });
@@ -39,10 +51,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   GET /api/books/:id
-   Public — fetch single book
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.get("/:id", async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
@@ -53,11 +62,10 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   POST /api/books
-   Admin — add a new book (with optional image)
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.post("/", upload.single("image"), async (req, res) => {
+  console.log("FILE:", req.file); // ✅ debug (keep for now)
+
   try {
     const { title, author, quantity } = req.body;
 
@@ -66,9 +74,9 @@ router.post("/", upload.single("image"), async (req, res) => {
     }
 
     const book = new Book({
-      title:    title.trim(),
-      author:   author.trim(),
-      image:    req.file ? req.file.filename : "",
+      title: title.trim(),
+      author: author.trim(),
+      image: req.file ? req.file.filename : "",
       quantity: parseInt(quantity) || 0,
     });
 
@@ -80,22 +88,21 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   PUT /api/books/:id
-   Admin — update book details
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { title, author, quantity } = req.body;
 
     const updateData = {
-      ...(title    && { title:    title.trim()    }),
-      ...(author   && { author:   author.trim()   }),
+      ...(title && { title: title.trim() }),
+      ...(author && { author: author.trim() }),
       ...(quantity !== undefined && { quantity: parseInt(quantity) }),
       ...(req.file && { image: req.file.filename }),
     };
 
-    const book = await Book.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const book = await Book.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+    });
     if (!book) return res.status(404).json({ message: "Book not found" });
 
     res.json({ message: "Book updated successfully", book });
@@ -105,10 +112,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   PATCH /api/books/:id/quantity
-   Admin — update only quantity
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.patch("/:id/quantity", async (req, res) => {
   try {
     const { quantity } = req.body;
@@ -131,10 +135,7 @@ router.patch("/:id/quantity", async (req, res) => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   DELETE /api/books/:id
-   Admin — delete a book
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 router.delete("/:id", async (req, res) => {
   try {
     const book = await Book.findByIdAndDelete(req.params.id);
